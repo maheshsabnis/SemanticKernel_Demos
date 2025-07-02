@@ -1,0 +1,6 @@
+@Core_DataAccessPlugIns_HostAddress = http://localhost:5144
+
+GET {{Core_DataAccessPlugIns_HostAddress}}/info/Berlin/Germany
+Accept: application/json
+
+###
