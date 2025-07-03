@@ -1,5 +1,6 @@
 using Core_DataAccessPlugIns.ChatServices;
 using Core_DataAccessPlugIns.Models;
+using Core_DataAccessPlugIns.RequestResponse;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,18 +26,27 @@ app.UseHttpsRedirection();
 
  
 
-app.MapGet("/info", async (ChatInfoGenerator info, string? city, string? country) =>
+app.MapPost("/info", async (ChatInfoGenerator info, PromptRequest request) =>
 {
-   var resp = await info.GetCustomersByCityAndCountry(city: city, country: country);
+   var resp = await info.GetCustomersByCityAndCountry(request.Prompt);
     return Results.Ok(resp);
 });
 
-app.MapGet("/orderdetails", async (ChatInfoGenerator info, string? propertyname, string? propertyvalue, string? operation) =>
+app.MapPost("/orderdetails", async (ChatInfoGenerator info, PromptRequest prompt) =>
 {
-    var resp = await info.GetFreightDetailsAsync(propertyname: propertyname, propertyvalue: propertyvalue, operation: operation);
+    var resp = await info.GetFreightDetailsAsync(prompt.Prompt);
     return Results.Ok(resp);
 });
 
+//app.MapPost("/prompt", async (ChatInfoGenerator info, PromptRequest request) =>
+//{
+//    if (request.Prompt is null)
+//    {
+//        return Results.BadRequest("Prompt cannot be null");
+//    }
+//    var response = await info.ParsePromptToDictionaryValues(request.Prompt);
+//    return Results.Ok(response);
+//});
 
 app.Run();
 
